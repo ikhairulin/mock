@@ -16,6 +16,7 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
+
 	@RequestMapping(value = "/personal", method = RequestMethod.POST)
 	public ClientData getClientData() {
 		ClientData clientData = new ClientData();
