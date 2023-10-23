@@ -11,16 +11,27 @@ import java.time.format.DateTimeFormatter;
 @RestController
 public class Application {
 
+	/**
+	 * Точка входа в приложение.
+	 * @param args массив аргументов командной строки
+	 */
 	public static void main(String[] args) {
 
 		SpringApplication.run(Application.class, args);
 	}
 
-
+	/**
+	 * Получает данные клиента на основе входного объекта RequestData.
+	 * Заменяет значения inn и accountId на символы "*", чтобы скрыть их.
+	 * Возвращает объект ClientData со скрытыми данными и сообщением приветствия.
+	 */
 	@RequestMapping(value = "/personal", method = RequestMethod.POST)
-	public ClientData getClientData() {
+	public ClientData getClientData(@RequestBody RequestData request) {
 		ClientData clientData = new ClientData();
-		clientData.collectData();
+		clientData.setClientInn(request.getInn());
+		clientData.setClientAccountId(request.getAccountId());
+		clientData.hideData();
+		clientData.setMessage("Здравствуйте, Ваши данные получены");
 		return clientData;
 	}
 
@@ -33,7 +44,6 @@ public class Application {
 		session.setSuccess(true);
 		session.data.setSignType();
 		session.data.setSessionDataRedisHashId();
-
 		return session;
 
 	}
@@ -44,4 +54,10 @@ public class Application {
 		System.out.println("id вашей сессии = " + sessionId);
 	}
 
+	@RequestMapping(value = "/generate", method = RequestMethod.GET)
+	public DataGenerator dataGenerate() {
+		DataGenerator dataGenerator = new DataGenerator();
+		dataGenerator.generateRandomData();
+		return dataGenerator;
+	}
 }
