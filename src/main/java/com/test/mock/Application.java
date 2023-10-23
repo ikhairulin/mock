@@ -1,8 +1,12 @@
 package com.test.mock;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
+import utils.ClientData;
+import utils.DataGenerator;
+import utils.RequestData;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,8 +26,10 @@ public class Application {
 
 	/**
 	 * Получает данные клиента на основе входного объекта RequestData.
-	 * Заменяет значения inn и accountId на символы "*", чтобы скрыть их.
+	 * Заменяет при помощи методов класса ClientData часть символов в полученных значениях
+	 * inn и accountId на символы "*", чтобы скрыть личные данные.
 	 * Возвращает объект ClientData со скрытыми данными и сообщением приветствия.
+	 * @param request объект класса RequestData (служит для обработки принимаемого JSON).
 	 */
 	@RequestMapping(value = "/personal", method = RequestMethod.POST)
 	public ClientData getClientData(@RequestBody RequestData request) {
@@ -35,6 +41,12 @@ public class Application {
 		return clientData;
 	}
 
+	/**
+	 * Метод обрабатывает GET-запрос для получения данных сессии.
+	 * Создает новый объект Session, устанавливает временную метку в текущее время в формате ISO_INSTANT,
+	 * устанавливает служебные атрибуты success и signType и id сессии
+	 * возвращает объект Session со всеми установленными атрибутами.
+	 */
 	@RequestMapping(value = "/data", method = RequestMethod.GET)
 	public Session getSessionData() {
 		Session session = new Session();
@@ -48,11 +60,15 @@ public class Application {
 
 	}
 
-	@GetMapping("/api/session")
-	public void getSessionData(@RequestParam("id") String sessionId) {
-		// Обработка GET запроса с параметром
+	/**
+	 Метод для получения идентификатора сессии.
+	 @param request объект HttpServletRequest, содержащий информацию о запросе */
+	@GetMapping(value = "/api")
+	public void getSessionId(HttpServletRequest request) {
+		String sessionId = request.getParameter("id");
 		System.out.println("id вашей сессии = " + sessionId);
 	}
+
 
 	@RequestMapping(value = "/generate", method = RequestMethod.GET)
 	public DataGenerator dataGenerate() {
