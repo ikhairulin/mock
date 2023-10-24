@@ -10,6 +10,8 @@ import utils.RequestData;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 @RestController
@@ -17,6 +19,7 @@ public class Application {
 
 	/**
 	 * Точка входа в приложение.
+	 *
 	 * @param args массив аргументов командной строки
 	 */
 	public static void main(String[] args) {
@@ -29,6 +32,7 @@ public class Application {
 	 * Заменяет при помощи методов класса ClientData часть символов в полученных значениях
 	 * inn и accountId на символы "*", чтобы скрыть личные данные.
 	 * Возвращает объект ClientData со скрытыми данными и сообщением приветствия.
+	 *
 	 * @param request объект класса RequestData (служит для обработки принимаемого JSON).
 	 */
 	@RequestMapping(value = "/personal", method = RequestMethod.POST)
@@ -37,7 +41,8 @@ public class Application {
 		clientData.setClientInn(request.getInn());
 		clientData.setClientAccountId(request.getAccountId());
 		clientData.hideData();
-		clientData.setMessage("Здравствуйте, Ваши данные получены");
+		clientData.setMessage("Your data has been successfully received");
+		System.out.println(clientData.getMessage());
 		return clientData;
 	}
 
@@ -47,7 +52,7 @@ public class Application {
 	 * устанавливает служебные атрибуты success и signType и id сессии
 	 * возвращает объект Session со всеми установленными атрибутами.
 	 */
-	@RequestMapping(value = "/data", method = RequestMethod.GET)
+	@RequestMapping(value = "/info", method = RequestMethod.GET)
 	public Session getSessionData() {
 		Session session = new Session();
 		OffsetDateTime timestamp = OffsetDateTime.now();
@@ -61,8 +66,10 @@ public class Application {
 	}
 
 	/**
-	 Метод для получения идентификатора сессии.
-	 @param request объект HttpServletRequest, содержащий информацию о запросе */
+	 * Метод для получения идентификатора сессии.
+	 *
+	 * @param request объект HttpServletRequest, содержащий информацию о запросе
+	 */
 	@GetMapping(value = "/api")
 	public void getSessionId(HttpServletRequest request) {
 		String sessionId = request.getParameter("id");
@@ -71,9 +78,15 @@ public class Application {
 
 
 	@RequestMapping(value = "/generate", method = RequestMethod.GET)
-	public DataGenerator dataGenerate() {
+
+	public List<String> dataGenerate(HttpServletRequest request) {
+		int genNum = Integer.parseInt(request.getParameter("num"));
+		List<String> listData = new ArrayList<>();
 		DataGenerator dataGenerator = new DataGenerator();
-		dataGenerator.generateRandomData();
-		return dataGenerator;
+		for (int i=0;i<genNum;i++) {
+			dataGenerator.generateRandomData();
+			listData.add(dataGenerator.getMessage());
+		}
+		return listData;
 	}
 }
