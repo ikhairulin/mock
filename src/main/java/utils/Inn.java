@@ -1,5 +1,7 @@
 package utils;
 
+import utils.AccountID;
+
 public class Inn {
     String region = "51";
     String department = "01";

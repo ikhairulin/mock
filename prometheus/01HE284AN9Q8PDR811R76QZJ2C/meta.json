@@ -1,0 +1,17 @@
+{
+	"ulid": "01HE284AN9Q8PDR811R76QZJ2C",
+	"minTime": 1698611280139,
+	"maxTime": 1698616800000,
+	"stats": {
+		"numSamples": 3090,
+		"numSeries": 5,
+		"numChunks": 30
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01HE284AN9Q8PDR811R76QZJ2C"
+		]
+	},
+	"version": 1
+}

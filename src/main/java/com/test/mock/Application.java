@@ -16,7 +16,6 @@ import java.util.List;
 @SpringBootApplication
 @RestController
 public class Application {
-
 	/**
 	 * Точка входа в приложение.
 	 *
@@ -66,7 +65,9 @@ public class Application {
 	}
 
 	/**
-	 * Метод для получения идентификатора сессии.
+	 * Метод для получения идентификатора сессии
+	 * с применением метода GET
+	 * по адресу /api?id=****
 	 *
 	 * @param request объект HttpServletRequest, содержащий информацию о запросе
 	 */
@@ -75,7 +76,6 @@ public class Application {
 		String sessionId = request.getParameter("id");
 		System.out.println("id вашей сессии = " + sessionId);
 	}
-
 
 	@RequestMapping(value = "/generate", method = RequestMethod.GET)
 
